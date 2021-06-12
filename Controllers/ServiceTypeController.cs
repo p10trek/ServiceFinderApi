@@ -39,7 +39,7 @@ namespace ServiceFinderApi.Controllers
             return ServiceResponse<ServiceType>.Ok(serviceType, "Service type found");
         }
 
-        [HttpPost("/CreateServiceType")]
+        [HttpPut("/CreateServiceType")]
         public async Task<ServiceResponse<bool>> Create(string typeName)
         {
             if (!ModelState.IsValid)
@@ -56,7 +56,7 @@ namespace ServiceFinderApi.Controllers
             await _context.SaveChangesAsync();
             return ServiceResponse<bool>.Ok(true, "Service type was added");
         }
-        [HttpPost("/DeleteServiceType")]
+        [HttpDelete("/DeleteServiceType")]
         public async Task<ServiceResponse<bool>> Delete(string serviceType)
         {
             var Type = await _context.ServiceTypes.Where(row => row.TypeName == serviceType).FirstOrDefaultAsync();

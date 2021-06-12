@@ -39,7 +39,7 @@ namespace ServiceFinderApi.Controllers
             return ServiceResponse<Provider>.Ok(provider, "Provider found");
         }
 
-        [HttpPost("/CreateProvider")]
+        [HttpPut("/CreateProvider")]
         public async Task<ServiceResponse<bool>> Create(CreateProvider provider)
         {
             if (!ModelState.IsValid)
@@ -117,7 +117,7 @@ namespace ServiceFinderApi.Controllers
             }
             return ServiceResponse<bool>.Error("Incorrect login or password");
         }
-        [HttpPost("/DeleteProvider")]
+        [HttpDelete("/DeleteProvider")]
         public async Task<ServiceResponse<bool>> Delete(string login)
         {
             var provider = await _context.Providers.Where(row => row.Login == login).FirstOrDefaultAsync();

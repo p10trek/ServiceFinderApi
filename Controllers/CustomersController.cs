@@ -44,7 +44,7 @@ namespace ServiceFinderApi.Controllers
             return ServiceResponse<Customer>.Ok(customer, "Cusotmer found");
         }
 
-        [HttpPost("/CreateCustomer")]
+        [HttpPut("/CreateCustomer")]
         public async Task<ServiceResponse<bool>> Create([Bind("Id,Login,Password,Name,Phone,Email")] CreateCustomer customer)
         {
             if(!ModelState.IsValid)
@@ -104,7 +104,7 @@ namespace ServiceFinderApi.Controllers
             }
             return ServiceResponse<bool>.Error("Incorrect login or password");
         }
-        [HttpPost("/DeleteCustomer")]
+        [HttpDelete("/DeleteCustomer")]
         public async Task<ServiceResponse<bool>>  Delete(string login)
         {
             var customer = await _context.Customers.Where(row => row.Login == login).FirstOrDefaultAsync();

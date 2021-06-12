@@ -39,7 +39,7 @@ namespace ServiceFinderApi.Controllers
             return ServiceResponse<ServiceStatus>.Ok(serviceStatus, "Status found");
         }
 
-        [HttpPost("/CreateServiceStatus")]
+        [HttpPut("/CreateServiceStatus")]
         public async Task<ServiceResponse<bool>> Create(string status)
         {
             if (!ModelState.IsValid)
@@ -56,7 +56,7 @@ namespace ServiceFinderApi.Controllers
             await _context.SaveChangesAsync();
             return ServiceResponse<bool>.Ok(true, "Service status was added");
         }
-        [HttpPost("/DeleteServiceStatus")]
+        [HttpDelete("/DeleteServiceStatus")]
         public async Task<ServiceResponse<bool>> Delete(string serviceStatus)
         {
             var status = await _context.ServiceStatuses.Where(row => row.Status == serviceStatus).FirstOrDefaultAsync();
