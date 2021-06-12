@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace ServiceFinderApi.Models
+namespace ServiceFinderApi.Models.RequestModels
 {
-    public partial class Provider
+    public class CreateProvider
     {
-        public Provider()
-        {
-            Orders = new HashSet<Order>();
-            Services = new HashSet<Service>();
-        }
-
-        public Guid Id { get; set; }
+        [Required]
         public string Login { get; set; }
+        [Required]
         public string Password { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
+        public string Phone { get; set; }
         public string Description { get; set; }
         public string Logo { get; set; }
+        [Required]
         public string City { get; set; }
+        [Required]
         public string Street { get; set; }
+        [Required]
         public string Number { get; set; }
+        [Required]
         public string PostalCode { get; set; }
-
-        public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Service> Services { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace ServiceFinderApi.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=ServiceFinderDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-N0H536N\\SQLEXPRESS;Database=ServiceFinderDB;Trusted_Connection=True;");
             }
         }
 
@@ -57,10 +57,7 @@ namespace ServiceFinderApi.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(32)
-                    .IsFixedLength(true);
+                entity.Property(e => e.Password).IsRequired();
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
@@ -130,6 +127,10 @@ namespace ServiceFinderApi.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.Login)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -144,10 +145,11 @@ namespace ServiceFinderApi.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Password)
+                entity.Property(e => e.Password).IsRequired();
+
+                entity.Property(e => e.Phone)
                     .IsRequired()
-                    .HasMaxLength(32)
-                    .IsFixedLength(true);
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.PostalCode)
                     .IsRequired()

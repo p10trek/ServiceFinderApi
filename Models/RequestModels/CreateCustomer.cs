@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace ServiceFinderApi.Models
+namespace ServiceFinderApi.Models.RequestModels
 {
-    public partial class Customer
+    public class CreateCustomer
     {
-        public Customer()
-        {
-            Orders = new HashSet<Order>();
-        }
-
-        public Guid Id { get; set; }
+        [Required]
         public string Login { get; set; }
+        [Required]
         public string Password { get; set; }
         public string Name { get; set; }
+        [Required]
         public string Phone { get; set; }
         public string Email { get; set; }
-
-        public virtual ICollection<Order> Orders { get; set; }
     }
 }
