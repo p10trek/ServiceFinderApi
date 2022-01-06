@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace ServiceFinderApi.Models.RequestModels
 {
-    public class CreateService
+    public class LoginUser
     {
         [Required]
-        public string ServiceName { get; set; }
-        public decimal Price { get; set; }
-        public string Description { get; set; }
-        public bool ServiceType { get; set; }
+        public string Login { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

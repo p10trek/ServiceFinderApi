@@ -18,15 +18,13 @@ namespace ServiceFinderApi.Models.RequestModels
         public string Email { get; set; }
         [Required]
         public string Phone { get; set; }
+        [Required]
+        public bool IsProvider { get; set; }
         public string Description { get; set; }
         public string Logo { get; set; }
-        [Required]
         public string City { get; set; }
-        [Required]
         public string Street { get; set; }
-        [Required]
         public string Number { get; set; }
-        [Required]
         public string PostalCode { get; set; }
     }
 }

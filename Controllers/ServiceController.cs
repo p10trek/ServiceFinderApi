@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceFinderApi.Models;
 using ServiceFinderApi.Models.RequestModels;
+using ServiceFinderApi.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +20,25 @@ namespace ServiceFinderApi.Controllers
         }
 
         [HttpGet("/GetServices")]
-        public async Task<ServiceResponse<List<Service>>> Index()
+        [Authorize(Roles = "Manager")]
+        public async Task<ServiceResponse<List<ServiceView>>> Index()
         {
-            return ServiceResponse<List<Service>>.Ok(await _context.Services.ToListAsync(), "Service list successfully downloaded");
+            var providerID = await (from user in _context.Users.Where(row => row.IsProvider == true)
+                       .Where(row => row.Login == User.Identity.Name)
+                                    join prov in _context.Providers on user.Id equals prov.UserId
+                                    select prov).Select(r => r.Id).FirstOrDefaultAsync();
+
+            var services = await (from ser in _context.Services
+                                  join serTyp in _context.ServiceTypes on ser.ServiceTypeId equals serTyp.Id
+                                  where ser.ProviderId == providerID
+                                  select new ServiceView
+                                  {
+                                      Description = ser.Description,
+                                      Price = ser.Price,
+                                      ServiceName = ser.ServiceName,
+                                      ServiceType = serTyp.TypeName
+                                  }).ToListAsync();
+            return ServiceResponse<List<ServiceView>>.Ok(services, "Service list successfully downloaded");
         }
 
         [HttpPost("/GetService")]
@@ -42,10 +60,22 @@ namespace ServiceFinderApi.Controllers
         }
 
         [HttpPut("/CreateService")]
+        [Authorize(Roles = "Manager")]
         public async Task<ServiceResponse<bool>> Create(CreateService service)
         {
             if (!ModelState.IsValid)
                 return ServiceResponse<bool>.Error("User adding error");
+
+            var providerID = await (from user in _context.Users.Where(row => row.IsProvider == true)
+                                   .Where(row => row.Login == User.Identity.Name)
+                                   join prov in _context.Providers on user.Id equals prov.UserId
+                                   select prov).Select(r => r.Id).FirstOrDefaultAsync();
+
+            string serviceType = service.ServiceType ? "Priced" : "UnPriced";
+
+            var servTypeId = await _context.ServiceTypes
+                .Where(row => row.TypeName == serviceType)
+                .Select(r => r.Id).FirstOrDefaultAsync();
 
             Service serviceToAdd = new Service
             {
@@ -53,8 +83,8 @@ namespace ServiceFinderApi.Controllers
                 ServiceName = service.ServiceName,
                 Description = service.Description,
                 Price = service.Price,
-                ProviderId = service.ProviderId,
-                ServiceTypeId = service.ServiceTypeId
+                ProviderId = providerID,
+                ServiceTypeId = servTypeId
             };
 
             _context.Add(serviceToAdd);
@@ -72,7 +102,7 @@ namespace ServiceFinderApi.Controllers
             {
                 return ServiceResponse<bool>.Error("Service not Found");
             }
-            if (!String.IsNullOrEmpty(editedService.Price))
+            if (service.Price != editedService.Price)
                 service.Price = editedService.Price;
             if (!String.IsNullOrEmpty(editedService.ServiceName))
                 service.ServiceName = editedService.ServiceName;
@@ -85,7 +115,7 @@ namespace ServiceFinderApi.Controllers
             await _context.SaveChangesAsync();
             return ServiceResponse<bool>.Ok(true, "Service edited corectly");
         }
-       
+
         [HttpDelete("/DeleteService")]
         public async Task<ServiceResponse<bool>> Delete(string serviceName)
         {
@@ -108,6 +138,23 @@ namespace ServiceFinderApi.Controllers
             if (isExist)
                 return ServiceResponse<bool>.Ok(true, "Service exist");
             return ServiceResponse<bool>.Error("Service don't exist");
+        }
+        [HttpGet("/GetProviderServices")]
+        public async Task<ServiceResponse<List<GetProvidersServicesView>>> GetProviderServices(Guid ProviderId)
+        {
+            var result = await _context.Services
+                                 .Where(row => row.ProviderId == ProviderId).Select(row =>
+                                    new GetProvidersServicesView
+                                    {
+                                        Description = row.Description,
+                                        Id = row.Id,
+                                        Price = row.Price,
+                                        ProviderId = row.ProviderId,
+                                        ServiceName = row.ServiceName,
+                                        ServiceTypeId = row.ServiceTypeId
+                                    }
+                                ).ToListAsync();
+            return ServiceResponse<List<GetProvidersServicesView>>.Ok(result, "Service exist");
         }
     }
 }

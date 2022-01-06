@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceFinderApi.Models.RequestModels
+namespace ServiceFinderApi.Models.ViewModels
 {
-    public class EditService
+    public class GetProvidersServicesView
     {
         public Guid Id { get; set; }
         public string ServiceName { get; set; }

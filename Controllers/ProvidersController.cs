@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ServiceFinderApi.Models;
 using ServiceFinderApi.Models.RequestModels;
+using ServiceFinderApi.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ServiceFinderApi.Controllers
@@ -17,20 +21,33 @@ namespace ServiceFinderApi.Controllers
             _context = context;
         }
         [HttpGet("/GetProviders")]
-        public async Task<ServiceResponse<List<Provider>>> Index()
+        public async Task<ServiceResponse<List<GetProvidersView>>> Index()
         {
-            return ServiceResponse<List<Provider>>.Ok(await _context.Providers.ToListAsync(), "User list successfully downloaded");
-        }
-        [HttpPost("/GetProvider")]
-        public async Task<ServiceResponse<Provider>> Details(Guid? id)
-        {
-            if (id == null)
+            return ServiceResponse<List<GetProvidersView>>.Ok(await _context.Providers.Select(row => new GetProvidersView
             {
-                return ServiceResponse<Provider>.Error("Id parameter is null");
-            }
+                City = row.City,
+                Description = row.Description,
+                Email = row.Email,
+                Id = row.Id,
+                Lng = row.Lng,
+                Lat = row.Lat,
+                Name =row.Name,
+                Number = row.Number,
+                Phone = row.Phone,
+                PostalCode = row.PostalCode,
+                Street =  row.Street
+                
+            }).ToListAsync(), "User list successfully downloaded");
+        }
+        [HttpGet("/GetProfile")]
+        [Authorize(Roles = "Manager")]
+        public async Task<ServiceResponse<Provider>> Details()
+        {
+            var userID = await _context.Users.Where(row => row.IsProvider == true)
+                        .Where(row => row.Login == User.Identity.Name)
+                        .Select(r => r.Id).FirstOrDefaultAsync();
 
-            var provider = await _context.Providers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var provider = await _context.Providers.FirstOrDefaultAsync(m => m.UserId ==  userID);
             if (provider == null)
             {
                 return ServiceResponse<Provider>.Error("Id not match to any provider");
@@ -45,92 +62,118 @@ namespace ServiceFinderApi.Controllers
             if (!ModelState.IsValid)
                 return ServiceResponse<bool>.Error("User adding error");
 
-            Provider providerToAdd = new Provider
+            Guid userId = Guid.NewGuid();
+            User user = new User
             {
-                Id = Guid.NewGuid(),
-                Login = provider.Login,
-                Password = BCrypt.Net.BCrypt.HashPassword(provider.Password),
                 Email = provider.Email,
+                Id = userId,
+                IsProvider = provider.IsProvider,
+                Login = provider.Login,
                 Name = provider.Name,
+                Password = provider.Password,
                 Phone = provider.Phone,
-                City = provider.City,
-                PostalCode = provider.PostalCode,
-                Description = provider.Description,
-                Logo = provider.Logo,
-                Number = provider.Number,
-                Street = provider.Street
             };
+            _context.Add(user);
 
-            _context.Add(providerToAdd);
+            if (provider.IsProvider)
+            {
+                HttpClient client = new HttpClient();
+
+                var result = await client.GetStringAsync($"https://maps.googleapis.com/maps/api/geocode/json?address={provider.City}+{provider.Street}+{provider.Number}&key=AIzaSyDWuh1lZP1loT8uTBwG1pdzzQbf03dKj4c");
+                
+                var location = JsonConvert.DeserializeObject<GetCoordinatessModel>(result);
+                decimal lat = location.results[0].geometry.location.lat;
+                decimal lng = location.results[0].geometry.location.lng;
+
+                Provider providerToAdd = new Provider
+                {
+                    Id = Guid.NewGuid(),
+                    //Login = provider.Login,
+                    //Password = BCrypt.Net.BCrypt.HashPassword(provider.Password),
+                    Email = provider.Email,
+                    Name = provider.Name,
+                    Phone = provider.Phone,
+                    City = provider.City,
+                    PostalCode = provider.PostalCode,
+                    Description = provider.Description,
+                    Logo = provider.Logo,
+                    Number = provider.Number,
+                    Street = provider.Street,
+                    UserId = userId,
+                    Lat = lat,
+                    Lng = lng
+                };
+                _context.Add(providerToAdd);
+            }
             await _context.SaveChangesAsync();
             return ServiceResponse<bool>.Ok(true, "User was added");
         }
-        [HttpPost("/EditProvider")]
-        public async Task<ServiceResponse<bool>> Edit(EditProvider editedProvider)
-        {
-            var provider = await _context.Providers
-                                        .Where(row => row.Login == editedProvider.Login)
-                                        .FirstOrDefaultAsync();
-            if (provider == null)
-            {
-                return ServiceResponse<bool>.Error("User not Found");
-            }
-            if (!String.IsNullOrEmpty(editedProvider.Name))
-                provider.Name = editedProvider.Name;
-            if (!String.IsNullOrEmpty(editedProvider.NewPassword))
-                provider.Password = BCrypt.Net.BCrypt.HashPassword(editedProvider.NewPassword);
-            if (!String.IsNullOrEmpty(editedProvider.Phone))
-                provider.Phone = editedProvider.Phone;
-            if (!String.IsNullOrEmpty(editedProvider.Logo))
-                provider.Logo = editedProvider.Logo;
-            if (!String.IsNullOrEmpty(editedProvider.Number))
-                provider.Number = editedProvider.Number;
-            if (!String.IsNullOrEmpty(editedProvider.PostalCode))
-                provider.PostalCode = editedProvider.PostalCode;
-            if (!String.IsNullOrEmpty(editedProvider.Street))
-                provider.Street = editedProvider.Street;
-            if (!String.IsNullOrEmpty(editedProvider.Description))
-                provider.Description = editedProvider.Description;
-            if (!String.IsNullOrEmpty(editedProvider.Email))
-                provider.Email = editedProvider.Email;
-            if (!String.IsNullOrEmpty(editedProvider.City))
-                provider.City = editedProvider.City;
+        //[HttpPost("/EditProvider")]
+        //public async Task<ServiceResponse<bool>> Edit(EditProvider editedProvider)
+        //{
+        //    var provider = await _context.Providers
+        //                                .Where(row => row.Login == editedProvider.Login)
+        //                                .FirstOrDefaultAsync();
+        //    if (provider == null)
+        //    {
+        //        return ServiceResponse<bool>.Error("User not Found");
+        //    }
+        //    if (!String.IsNullOrEmpty(editedProvider.Name))
+        //        provider.Name = editedProvider.Name;
+        //    if (!String.IsNullOrEmpty(editedProvider.NewPassword))
+        //        provider.Password = BCrypt.Net.BCrypt.HashPassword(editedProvider.NewPassword);
+        //    if (!String.IsNullOrEmpty(editedProvider.Phone))
+        //        provider.Phone = editedProvider.Phone;
+        //    if (!String.IsNullOrEmpty(editedProvider.Logo))
+        //        provider.Logo = editedProvider.Logo;
+        //    if (!String.IsNullOrEmpty(editedProvider.Number))
+        //        provider.Number = editedProvider.Number;
+        //    if (!String.IsNullOrEmpty(editedProvider.PostalCode))
+        //        provider.PostalCode = editedProvider.PostalCode;
+        //    if (!String.IsNullOrEmpty(editedProvider.Street))
+        //        provider.Street = editedProvider.Street;
+        //    if (!String.IsNullOrEmpty(editedProvider.Description))
+        //        provider.Description = editedProvider.Description;
+        //    if (!String.IsNullOrEmpty(editedProvider.Email))
+        //        provider.Email = editedProvider.Email;
+        //    if (!String.IsNullOrEmpty(editedProvider.City))
+        //        provider.City = editedProvider.City;
 
-                _context.Update(provider);
-            await _context.SaveChangesAsync();
-            return ServiceResponse<bool>.Ok(true, "User edited corectly");
-        }
-        [HttpPost("/LoginProvider")]
-        public async Task<ServiceResponse<bool>> Login(LoginProvider provider)
-        {
-            if (!ModelState.IsValid)
-                return ServiceResponse<bool>.Error("User adding error");
-            var providerToLogin = await _context.Providers.Where(row => row.Login == provider.Login).FirstOrDefaultAsync();
+        //        _context.Update(provider);
+        //    await _context.SaveChangesAsync();
+        //    return ServiceResponse<bool>.Ok(true, "User edited corectly");
+        //}
+        //[HttpPost("/LoginProvider")]
+        //public async Task<ServiceResponse<bool>> Login(LoginProvider provider)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return ServiceResponse<bool>.Error("User adding error");
+        //    var providerToLogin = await _context.Providers.Where(row => row.Login == provider.Login).FirstOrDefaultAsync();
 
-            if (providerToLogin == null)
-                return ServiceResponse<bool>.Error("User not found");
+        //    if (providerToLogin == null)
+        //        return ServiceResponse<bool>.Error("User not found");
 
-            if (providerToLogin.Login == provider.Login)
-            {
-                if (BCrypt.Net.BCrypt.Verify(provider.Password, providerToLogin.Password))
-                    return ServiceResponse<bool>.Ok(true, "User loged in");
-            }
-            return ServiceResponse<bool>.Error("Incorrect login or password");
-        }
-        [HttpDelete("/DeleteProvider")]
-        public async Task<ServiceResponse<bool>> Delete(string login)
-        {
-            var provider = await _context.Providers.Where(row => row.Login == login).FirstOrDefaultAsync();
-            if (provider == null)
-            {
-                return ServiceResponse<bool>.Error("User not found");
-            }
+        //    if (providerToLogin.Login == provider.Login)
+        //    {
+        //        if (BCrypt.Net.BCrypt.Verify(provider.Password, providerToLogin.Password))
+        //            return ServiceResponse<bool>.Ok(true, "User loged in");
+        //    }
+        //    return ServiceResponse<bool>.Error("Incorrect login or password");
+        //}
+        //[HttpDelete("/DeleteProvider")]
+        //public async Task<ServiceResponse<bool>> Delete(string login)
+        //{
+        //    var provider = await _context.Providers.Where(row => row.Login == login).FirstOrDefaultAsync();
+        //    if (provider == null)
+        //    {
+        //        return ServiceResponse<bool>.Error("User not found");
+        //    }
 
-            _context.Remove(provider);
-            await _context.SaveChangesAsync();
+        //    _context.Remove(provider);
+        //    await _context.SaveChangesAsync();
 
-            return ServiceResponse<bool>.Ok(true, "User succesfully deleted");
-        }
+        //    return ServiceResponse<bool>.Ok(true, "User succesfully deleted");
+        //}
         [HttpGet("/IfProviderExist")]
         public async Task<ServiceResponse<bool>> ProviderExists(Guid id)
         {

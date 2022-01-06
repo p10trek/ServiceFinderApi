@@ -18,7 +18,7 @@ namespace ServiceFinderApi.Models
         public DateTime EndDate { get; set; }
         public Guid StatusId { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        public virtual User Customer { get; set; }
         public virtual Provider Provider { get; set; }
         public virtual Service Service { get; set; }
         public virtual ServiceType ServiceNavigation { get; set; }
