@@ -18,6 +18,7 @@ namespace ServiceFinderApi.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
         public Guid ServiceTypeId { get; set; }
+        public decimal Duration { get; set; }
 
         public virtual Provider Provider { get; set; }
         public virtual ICollection<Order> Orders { get; set; }

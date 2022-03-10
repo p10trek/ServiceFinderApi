@@ -74,13 +74,7 @@ namespace ServiceFinderApi.Models
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_Servicec");
-
-                entity.HasOne(d => d.ServiceNavigation)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.ServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_ServiceType");
+                    .HasConstraintName("FK_Orders_Service");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Orders)
@@ -152,6 +146,10 @@ namespace ServiceFinderApi.Models
                     .ValueGeneratedNever()
                     .HasColumnName("ID");
 
+                entity.Property(e => e.Duration)
+                    .HasColumnType("numeric(2, 0)")
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.ServiceName).IsRequired();
@@ -211,6 +209,8 @@ namespace ServiceFinderApi.Models
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("ID");
+
+                entity.Property(e => e.Code).HasMaxLength(5);
 
                 entity.Property(e => e.Email)
                     .IsRequired()

@@ -49,10 +49,11 @@ namespace ServiceFinderApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                 };
             });
+            
             services.AddDbContext<ServiceFinderDBContext>(
                      options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
-            
+            services.AddHttpClient();
             services.AddCors();
             services.AddSwaggerGen(swagger =>
             {

@@ -34,6 +34,7 @@ namespace ServiceFinderApi.Controllers
                                   select new ServiceView
                                   {
                                       Description = ser.Description,
+                                      Duration = (int)ser.Duration,
                                       Price = ser.Price,
                                       ServiceName = ser.ServiceName,
                                       ServiceType = serTyp.TypeName
@@ -84,7 +85,8 @@ namespace ServiceFinderApi.Controllers
                 Description = service.Description,
                 Price = service.Price,
                 ProviderId = providerID,
-                ServiceTypeId = servTypeId
+                ServiceTypeId = servTypeId,
+                Duration = service.Duration
             };
 
             _context.Add(serviceToAdd);
@@ -151,6 +153,8 @@ namespace ServiceFinderApi.Controllers
                                     Price = serv.Price,
                                     ProviderId = serv.ProviderId,
                                     ServiceName = serv.ServiceName,
+                                    Duration = (int)serv.Duration,
+
                                     IsPriced= type.TypeName=="Priced"? true:false
                                 }).ToListAsync();
             return ServiceResponse<List<GetProvidersServicesView>>.Ok(result, "Service exist");

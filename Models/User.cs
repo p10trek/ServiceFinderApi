@@ -20,6 +20,7 @@ namespace ServiceFinderApi.Models
         public string Phone { get; set; }
         public string Email { get; set; }
         public bool IsProvider { get; set; }
+        public string Code { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<Provider> Providers { get; set; }

@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ServiceFinderApi.Startup">
+    <Position X="1.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAgAAACAAAAAA=</HashCode>
+      <FileName>Startup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.ServiceResponse&lt;T&gt;">
+    <Position X="3.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAgAAABAAAAABIAAAAAA=</HashCode>
+      <FileName>ServiceResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Program">
+    <Position X="5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.AuthController" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Controllers\AuthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.MyControllerBase" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\MyControllerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.OrderController" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQEAIABBAAAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\OrderController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ProvidersController" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBAAAAAAAAAAAAAEAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ProvidersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ServiceController" Collapsed="true">
+    <Position X="14" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAEAAABBAAAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ServiceController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ServiceStatusesController" Collapsed="true">
+    <Position X="16.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgBBAAAAAAAAAAAAAEAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ServiceStatusesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ServiceTypeController" Collapsed="true">
+    <Position X="18.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBAAgAAAAAAAAAAEAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ServiceTypeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.SmsController" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAABAAAAAACAAAAACABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\SmsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.UserController" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBQAAAAAAAAAAAAEAAEACAAEQAAAAAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.WeatherForecastController" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEBAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\WeatherForecastController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.CreateOrder" Collapsed="true">
+    <Position X="21" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAICACAIAAAAAAAADAAAAAAgAAAAABAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\RequestModels\CreateOrder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.CreateProvider" Collapsed="true">
+    <Position X="22.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAACAgAAAIIEAAAAQAAAAAAAACAAYQIAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\CreateProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.CreateService" Collapsed="true">
+    <Position X="24.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAQAiAAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Models\RequestModels\CreateService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.CreateUser" Collapsed="true">
+    <Position X="26.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAQAAAAAAAACAAAQIAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\CreateUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.EditOrder" Collapsed="true">
+    <Position X="29.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAICAAAIAAAAAAAACAAAAAAgAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\RequestModels\EditOrder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.EditProvider" Collapsed="true">
+    <Position X="21" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAACAgAAAIIFAAAAQAAAAAAAAAAAIQIAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\EditProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.EditService" Collapsed="true">
+    <Position X="22.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAQAgAAAABAIAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Models\RequestModels\EditService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.EditUser" Collapsed="true">
+    <Position X="24.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAABAAAAQAAAAAAAAAAAAQIAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\EditUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.LoginModel" Collapsed="true">
+    <Position X="26.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAQAAAAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\LoginModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.LoginProvider" Collapsed="true">
+    <Position X="28" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAQAAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\LoginProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.RequestModels.LoginUser" Collapsed="true">
+    <Position X="29.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAQAAAAAAA=</HashCode>
+      <FileName>Models\RequestModels\LoginUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.FreeTermsView" Collapsed="true">
+    <Position X="28" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ViewModels\FreeTermsView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.FreeTermBetween" Collapsed="true">
+    <Position X="26.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ViewModels\FreeTermsView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.GetCoordinatessModel" Collapsed="true">
+    <Position X="29.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ViewModels\GetCoordinatessModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.GetProviderOrdersView" Collapsed="true">
+    <Position X="21" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAACQAAAAAAgAAAAAAAAAAAAAACAAAAAAAAAAgA=</HashCode>
+      <FileName>Models\ViewModels\GetProviderOrdersView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.GetProvidersServicesView" Collapsed="true">
+    <Position X="22.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAQAiAAAABAAAQAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Models\ViewModels\GetProvidersServicesView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.GetProvidersView" Collapsed="true">
+    <Position X="24.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACAAAAACAgAAAIIEAAAAQAAAAAAAAAAAIAIAAAAAA=</HashCode>
+      <FileName>Models\ViewModels\GetProvidersView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ViewModels.ServiceView" Collapsed="true">
+    <Position X="22.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAQAiAAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Models\ViewModels\ServiceView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.Customer" Collapsed="true">
+    <Position X="28" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAACAAAAAAAAAAAAQAAAAAAAACAAAQIAAAAAA=</HashCode>
+      <FileName>Models\Customer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.Order" Collapsed="true">
+    <Position X="21" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAMCACAMAAAEAAAADAAAAAAAAAAgQBAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.Provider" Collapsed="true">
+    <Position X="22.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gQEDAQAAACAgAAAIIEAAAAwAAAAAAAAAAAIAIAAAAAA=</HashCode>
+      <FileName>Models\Provider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.Service" Collapsed="true">
+    <Position X="24.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAQAmAAAABAIAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Models\Service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ServiceFinderDBContext" Collapsed="true">
+    <Position X="26.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAEIACBAAQAUAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Models\ServiceFinderDBContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ServiceLog" Collapsed="true">
+    <Position X="28" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAEAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ServiceLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ServiceStatus" Collapsed="true">
+    <Position X="29.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ServiceStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.ServiceType" Collapsed="true">
+    <Position X="21" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ServiceType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Models.User" Collapsed="true">
+    <Position X="24.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAACAEAAAAAAAgAAQAAAAAAAACAAQQIAAAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

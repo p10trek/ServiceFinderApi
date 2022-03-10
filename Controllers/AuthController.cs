@@ -55,9 +55,14 @@ namespace ServiceFinderApi.Controllers
                     expires: DateTime.Now.AddMinutes(5),
                     signingCredentials: signinCredentials
                 );
+                Guid provId = Guid.Empty;
+                if (dbUser.IsProvider)
+                    provId = await _context.Providers
+                        .Where(r => r.UserId == dbUser.Id)
+                        .Select(r=>r.Id).FirstOrDefaultAsync();
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new { Token = tokenString, login = user.UserName, isProvider = true });
+                return Ok(new { Token = tokenString, login = user.UserName, isProvider = dbUser.IsProvider, providerId = provId });
             }
         }
     }

@@ -11,6 +11,7 @@ namespace ServiceFinderApi.Models.ViewModels
         public string ServiceName { get; set; }
         public Guid ProviderId { get; set; }
         public decimal Price { get; set; }
+        public int Duration { get; set; }
         public string Description { get; set; }
         public bool IsPriced { get; set; }
     }

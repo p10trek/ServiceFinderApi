@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ServiceFinderApi.Controllers.AuthController" Collapsed="true">
+    <Position X="5.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Controllers\AuthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.MyControllerBase" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\MyControllerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.OrderController" Collapsed="true">
+    <Position X="12.75" Y="4.25" Width="2" />
+    <InheritanceLine Type="ServiceFinderApi.Controllers.MyControllerBase" ManuallyRouted="true">
+      <Path>
+        <Point X="10.25" Y="1.191" />
+        <Point X="10.25" Y="4.067" />
+        <Point X="13.75" Y="4.067" />
+        <Point X="13.75" Y="4.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQEAIABBAAAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\OrderController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ProvidersController" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBAAAAAAAAAAAAAEAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ProvidersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ServiceController" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAEAAABBAAAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ServiceController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ServiceStatusesController" Collapsed="true">
+    <Position X="5.5" Y="4.25" Width="2" />
+    <InheritanceLine Type="ServiceFinderApi.Controllers.MyControllerBase" ManuallyRouted="true">
+      <Path>
+        <Point X="10.25" Y="1.191" />
+        <Point X="10.25" Y="4.065" />
+        <Point X="6.5" Y="4.065" />
+        <Point X="6.5" Y="4.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgBBAAAAAAAAAAAAAEAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ServiceStatusesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.ServiceTypeController" Collapsed="true">
+    <Position X="12.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBAAgAAAAAAAAAAEAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ServiceTypeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.SmsController" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAABAAAAAACAAAAACABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\SmsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.UserController" Collapsed="true">
+    <Position X="5.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBQAAAAAAAAAAAAEAAEACAAEQAAAAAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServiceFinderApi.Controllers.WeatherForecastController" Collapsed="true">
+    <Position X="9" Y="5" Width="2.5" />
+    <InheritanceLine Type="ServiceFinderApi.Controllers.MyControllerBase" ManuallyRouted="true">
+      <Path>
+        <Point X="10.25" Y="1.191" />
+        <Point X="10.25" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEBAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\WeatherForecastController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -31,6 +31,7 @@ namespace ServiceFinderApi.Controllers
                                     end = ord.EndTime,
                                 }).ToListAsync();
 
+
             return ServiceResponse<List<GetProviderOrdersView>>.Ok(result, "Order list successfully downloaded");
         }
         [HttpGet("/GetFreeTerms")]
@@ -63,10 +64,11 @@ namespace ServiceFinderApi.Controllers
                 if (counter == 0) 
                 {
                     freeTermBetween = new FreeTermBetween();
-                    freeTermBetween.FreeTermStart = el.end;
+
+                    freeTermBetween.FreeTermStart = DateTime.Now < el.start?DateTime.Now:el.end;
                     if (result.Last().id == el.id)
                     {
-                        freeTermBetween.FreeTermEnd = DateTime.Now.AddMonths(1);
+                        freeTermBetween.FreeTermEnd = DateTime.Now < el.start?el.start - servDur : DateTime.Now.AddMonths(1);
                         freeTerms.FreeTermsBetween.Add(freeTermBetween);
                         counter = 0;
                         continue;
@@ -82,6 +84,11 @@ namespace ServiceFinderApi.Controllers
                     counter = 0;
                 }
             }
+            freeTerms.FreeTermsBetween.Add(new FreeTermBetween
+            {
+                FreeTermStart = result.Last().end,
+                FreeTermEnd = DateTime.Now.AddMonths(1)
+            });
             freeTerms.FreeTermFrom = result.Last().end;
             return ServiceResponse<FreeTermsView>.Ok(freeTerms, "Free terms list successfully downloaded");
         }
@@ -111,18 +118,25 @@ namespace ServiceFinderApi.Controllers
             if (!ModelState.IsValid)
                 return ServiceResponse<bool>.Error("User adding error");
 
+            string userLogin = User.Identity.Name ?? "Guest";
+
+            var userId = await (from user in _context.Users
+                                    .Where(row => row.Login == userLogin)
+                                select user.Id).FirstOrDefaultAsync();
+
             Order orderToAdd = new Order
             {
                 Id = Guid.NewGuid(),
-                CustomerId = order.CustomerId,
+                CustomerId = userId,
                 CustomerComment = order.CustomerComment,
                 EndTime = order.EndDate,
                 ProviderId = order.ProviderId,
-                ProviderComment = order.ProviderComment,
                 Rate = order.Rate,
                 ServiceId = order.ServiceId,
                 StartDate = order.StartDate,
-                StatusId = order.StatusId
+                StatusId = await _context.ServiceStatuses
+                .Where(row => row.Status == "Added")
+                .Select(r=>r.Id).FirstOrDefaultAsync()
             };
 
             _context.Add(orderToAdd);
@@ -156,6 +170,38 @@ namespace ServiceFinderApi.Controllers
             _context.Update(order);
             await _context.SaveChangesAsync();
             return ServiceResponse<bool>.Ok(true, "Order edited corectly");
+        }
+
+
+        [HttpGet("/MoveOrder")]
+        public async Task<ServiceResponse<bool>> Move(Guid orderId, DateTime newDate)
+        {
+            var order = await _context.Orders.Where(row => row.Id == orderId).FirstOrDefaultAsync();
+            var notEmptys = await _context.Orders.Where(row => row.ProviderId == order.ProviderId)
+                .Select(row => new
+                {
+                    from = row.StartDate,
+                    to = row.EndTime
+                }).ToListAsync();
+            foreach(var notEmpty in notEmptys)
+            {
+                if(notEmpty.from<=newDate && notEmpty.to >= newDate)
+                {
+                    return ServiceResponse<bool>.Error("Data allready reserved");
+                }
+            }
+
+            var duration = order.EndTime - order.StartDate;
+            var newEndTime = newDate + duration;
+
+            order.StartDate = newDate;
+            order.EndTime = newEndTime;
+
+            _context.Update(order).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return ServiceResponse<bool>.Ok(true, "Data is not reserved");
+            //todo dorobicc zapis do bazki
         }
 
         [HttpDelete("/DeleteOrder")]

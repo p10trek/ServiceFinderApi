@@ -21,7 +21,6 @@ namespace ServiceFinderApi.Models
         public virtual User Customer { get; set; }
         public virtual Provider Provider { get; set; }
         public virtual Service Service { get; set; }
-        public virtual ServiceType ServiceNavigation { get; set; }
         public virtual ServiceStatus Status { get; set; }
     }
 }
