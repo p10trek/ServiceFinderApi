@@ -142,18 +142,17 @@ namespace ServiceFinderApi.Controllers
         [HttpGet("/GetProviderServices")]
         public async Task<ServiceResponse<List<GetProvidersServicesView>>> GetProviderServices(Guid ProviderId)
         {
-            var result = await _context.Services
-                                 .Where(row => row.ProviderId == ProviderId).Select(row =>
-                                    new GetProvidersServicesView
-                                    {
-                                        Description = row.Description,
-                                        Id = row.Id,
-                                        Price = row.Price,
-                                        ProviderId = row.ProviderId,
-                                        ServiceName = row.ServiceName,
-                                        ServiceTypeId = row.ServiceTypeId
-                                    }
-                                ).ToListAsync();
+            var result = await (from serv in _context.Services.Where(row => row.ProviderId == ProviderId)
+                                join type in _context.ServiceTypes on serv.ServiceTypeId equals type.Id
+                                select new GetProvidersServicesView 
+                                {
+                                    Description = serv.Description,
+                                    Id = serv.Id,
+                                    Price = serv.Price,
+                                    ProviderId = serv.ProviderId,
+                                    ServiceName = serv.ServiceName,
+                                    IsPriced= type.TypeName=="Priced"? true:false
+                                }).ToListAsync();
             return ServiceResponse<List<GetProvidersServicesView>>.Ok(result, "Service exist");
         }
     }

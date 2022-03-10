@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ServiceFinderApi.Models;
 using ServiceFinderApi.Models.RequestModels;
+using ServiceFinderApi.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,74 @@ namespace ServiceFinderApi.Controllers
             _context = context;
         }
 
-        [HttpGet("/GetOrders")]
-        public async Task<ServiceResponse<List<Order>>> Index()
+        [HttpGet("/GetProviderOrders")]
+        public async Task<ServiceResponse<List<GetProviderOrdersView>>> Index(Guid providerId)
         {
-            return ServiceResponse<List<Order>>.Ok(await _context.Orders.ToListAsync(), "Order list successfully downloaded");
+            var result = await (from ord in _context.Orders.Where(row => row.ProviderId == providerId)
+                                join serv in _context.Services on ord.ServiceId equals serv.Id
+                                select new GetProviderOrdersView
+                                {
+                                    id = ord.Id,
+                                    title = serv.ServiceName,
+                                    start = ord.StartDate,
+                                    end = ord.EndTime,
+                                }).ToListAsync();
+
+            return ServiceResponse<List<GetProviderOrdersView>>.Ok(result, "Order list successfully downloaded");
         }
+        [HttpGet("/GetFreeTerms")]
+        public async Task<ServiceResponse<FreeTermsView>> GetFreeTerms(Guid providerId, int serviceDuration)
+        {
+            int counter = 0;
+            FreeTermsView freeTerms = new FreeTermsView();
+            TimeSpan servDur = new TimeSpan(serviceDuration, 0, 0);
+            var result = await (from ord in _context.Orders.Where(row => row.ProviderId == providerId)
+                                join serv in _context.Services on ord.ServiceId equals serv.Id
+                                where ord.EndTime >= DateTime.Now
+                                select new GetProviderOrdersView
+                                {
+                                    id = ord.Id,
+                                    start = ord.StartDate,
+                                    end = ord.EndTime,
+                                }).OrderBy(r=>r.start)
+                                .ToListAsync();
+            FreeTermBetween freeTermBetween = new FreeTermBetween();
+            if (result.Count == 0)
+                return ServiceResponse<FreeTermsView>.Ok(new FreeTermsView
+                {
+
+                    FreeTermsBetween = new List<FreeTermBetween>(),
+                    FreeTermFrom = DateTime.Now
+                }, "Free terms list successfully downloaded");
+            foreach (var el in result)
+            {
+
+                if (counter == 0) 
+                {
+                    freeTermBetween = new FreeTermBetween();
+                    freeTermBetween.FreeTermStart = el.end;
+                    if (result.Last().id == el.id)
+                    {
+                        freeTermBetween.FreeTermEnd = DateTime.Now.AddMonths(1);
+                        freeTerms.FreeTermsBetween.Add(freeTermBetween);
+                        counter = 0;
+                        continue;
+                    }
+                    counter++;
+                }
+                else
+                { 
+                    freeTermBetween.FreeTermEnd = el.start-servDur;
+                    TimeSpan timeB = freeTermBetween.FreeTermEnd - freeTermBetween.FreeTermStart;
+                    if (timeB>=servDur)
+                    freeTerms.FreeTermsBetween.Add(freeTermBetween);
+                    counter = 0;
+                }
+            }
+            freeTerms.FreeTermFrom = result.Last().end;
+            return ServiceResponse<FreeTermsView>.Ok(freeTerms, "Free terms list successfully downloaded");
+        }
+    
 
         [HttpPost("/GetOrder")]
         public async Task<ServiceResponse<Order>> Details(Guid? id)
@@ -52,7 +116,7 @@ namespace ServiceFinderApi.Controllers
                 Id = Guid.NewGuid(),
                 CustomerId = order.CustomerId,
                 CustomerComment = order.CustomerComment,
-                EndDate = order.EndDate,
+                EndTime = order.EndDate,
                 ProviderId = order.ProviderId,
                 ProviderComment = order.ProviderComment,
                 Rate = order.Rate,
@@ -79,7 +143,7 @@ namespace ServiceFinderApi.Controllers
             if (!String.IsNullOrEmpty(editedOrder.CustomerComment))
                 order.CustomerComment = editedOrder.CustomerComment;
             if (editedOrder.EndDate != DateTime.MinValue)
-                order.EndDate = editedOrder.EndDate;
+                order.EndTime = editedOrder.EndDate;
             if (!String.IsNullOrEmpty(editedOrder.ProviderComment))
                 order.ProviderComment = editedOrder.ProviderComment;
             if (editedOrder.Rate != 0)

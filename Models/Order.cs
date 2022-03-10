@@ -15,7 +15,7 @@ namespace ServiceFinderApi.Models
         public string ProviderComment { get; set; }
         public decimal? Rate { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime EndTime { get; set; }
         public Guid StatusId { get; set; }
 
         public virtual User Customer { get; set; }

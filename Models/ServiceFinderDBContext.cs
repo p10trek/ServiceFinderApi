@@ -46,7 +46,7 @@ namespace ServiceFinderApi.Models
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
-                entity.Property(e => e.EndDate).HasColumnType("datetime");
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
 
                 entity.Property(e => e.ProviderId).HasColumnName("ProviderID");
 
