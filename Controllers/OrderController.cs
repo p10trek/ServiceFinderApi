@@ -185,7 +185,9 @@ namespace ServiceFinderApi.Controllers
         public async Task<ServiceResponse<bool>> Move(Guid orderId, DateTime newDate)
         {
             var order = await _context.Orders.Where(row => row.Id == orderId).FirstOrDefaultAsync();
-            var notEmptys = await _context.Orders.Where(row => row.ProviderId == order.ProviderId)
+            var notEmptys = await _context.Orders
+                .Where(row => row.ProviderId == order.ProviderId)
+                .Where(row => row.Id!=orderId)
                 .Select(row => new
                 {
                     from = row.StartDate,
@@ -200,9 +202,10 @@ namespace ServiceFinderApi.Controllers
             }
 
             var duration = order.EndTime - order.StartDate;
-            var newEndTime = newDate + duration;
-
-            order.StartDate = newDate;
+            var startMinutes = (newDate.Minute / 15)*15;
+            var roundNewDate = new DateTime(newDate.Year, newDate.Month, newDate.Day, newDate.Hour, startMinutes, 0);
+            var newEndTime = roundNewDate + duration;
+            order.StartDate = roundNewDate;
             order.EndTime = newEndTime;
 
             _context.Update(order).State = EntityState.Modified;
