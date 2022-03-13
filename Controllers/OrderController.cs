@@ -52,12 +52,20 @@ namespace ServiceFinderApi.Controllers
                                 .ToListAsync();
             FreeTermBetween freeTermBetween = new FreeTermBetween();
             if (result.Count == 0)
+            {
+                var FreeTerms = new List<FreeTermBetween>();
+                FreeTerms.Add(new FreeTermBetween
+                {
+                    FreeTermStart = DateTime.Now,
+                    FreeTermEnd = DateTime.Now.AddMonths(1),
+                });
                 return ServiceResponse<FreeTermsView>.Ok(new FreeTermsView
                 {
 
-                    FreeTermsBetween = new List<FreeTermBetween>(),
+                    FreeTermsBetween = FreeTerms,
                     FreeTermFrom = DateTime.Now
                 }, "Free terms list successfully downloaded");
+            }
             foreach (var el in result)
             {
 
