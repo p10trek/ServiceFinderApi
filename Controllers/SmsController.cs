@@ -26,7 +26,29 @@ namespace ServiceFinderApi.Controllers
             _context = context;
         }
         [HttpGet("/SendSms")]
-        public async Task SendSms(string userName)
+        public async Task SendSms(string userName, string message)
+        {
+
+            var user = await (_context.Users.Where(r => r.Login == userName)).FirstOrDefaultAsync();
+            if (user == null)
+                return;
+
+            Random random = new Random();
+
+            var httpRequestMessage = new HttpRequestMessage(
+            HttpMethod.Get,
+            URL.Replace("{code}", message).Replace("{phone}", user.Phone))
+            {
+                Headers =
+                {
+                    { HeaderNames.Authorization, "Bearer E3n3UHacCWinZHeBmWzvcFoURHEU7QUPqkt8TG2X" }
+                }
+            };
+            var httpClient = _httpClientFactory.CreateClient();
+            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+        }
+        [HttpGet("/SendCodeSms")]
+        public async Task SendCodeSms(string userName)
         {
 
             var user = await (_context.Users.Where(r => r.Login == userName)).FirstOrDefaultAsync();

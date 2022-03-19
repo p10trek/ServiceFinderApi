@@ -182,7 +182,7 @@ namespace ServiceFinderApi.Controllers
 
 
         [HttpGet("/MoveOrder")]
-        public async Task<ServiceResponse<bool>> Move(Guid orderId, DateTime newDate)
+        public async Task<ServiceResponse<MoveOrderResponse>> Move(Guid orderId, DateTime newDate)
         {
             var order = await _context.Orders.Where(row => row.Id == orderId).FirstOrDefaultAsync();
             var notEmptys = await _context.Orders
@@ -197,7 +197,7 @@ namespace ServiceFinderApi.Controllers
             {
                 if(notEmpty.from<=newDate && notEmpty.to >= newDate)
                 {
-                    return ServiceResponse<bool>.Error("Data allready reserved");
+                    return ServiceResponse<MoveOrderResponse>.Error("Data allready reserved");
                 }
             }
 
@@ -210,8 +210,13 @@ namespace ServiceFinderApi.Controllers
 
             _context.Update(order).State = EntityState.Modified;
             _context.SaveChanges();
+            var response = new MoveOrderResponse
+            {
+                provName = (await _context.Providers.Where(r=>r.Id == order.ProviderId).FirstOrDefaultAsync()).Name,
+                clientName = (await _context.Users.Where(r=>r.Id == order.CustomerId).FirstOrDefaultAsync()).Login
+            };
 
-            return ServiceResponse<bool>.Ok(true, "Data is not reserved");
+            return ServiceResponse<MoveOrderResponse>.Ok(response, "Data is not reserved");
             //todo dorobicc zapis do bazki
         }
 
