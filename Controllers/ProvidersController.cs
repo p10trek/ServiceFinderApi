@@ -108,41 +108,46 @@ namespace ServiceFinderApi.Controllers
             await _context.SaveChangesAsync();
             return ServiceResponse<bool>.Ok(true, "User was added");
         }
-        //[HttpPost("/EditProvider")]
-        //public async Task<ServiceResponse<bool>> Edit(EditProvider editedProvider)
-        //{
-        //    var provider = await _context.Providers
-        //                                .Where(row => row.Login == editedProvider.Login)
-        //                                .FirstOrDefaultAsync();
-        //    if (provider == null)
-        //    {
-        //        return ServiceResponse<bool>.Error("User not Found");
-        //    }
-        //    if (!String.IsNullOrEmpty(editedProvider.Name))
-        //        provider.Name = editedProvider.Name;
-        //    if (!String.IsNullOrEmpty(editedProvider.NewPassword))
-        //        provider.Password = BCrypt.Net.BCrypt.HashPassword(editedProvider.NewPassword);
-        //    if (!String.IsNullOrEmpty(editedProvider.Phone))
-        //        provider.Phone = editedProvider.Phone;
-        //    if (!String.IsNullOrEmpty(editedProvider.Logo))
-        //        provider.Logo = editedProvider.Logo;
-        //    if (!String.IsNullOrEmpty(editedProvider.Number))
-        //        provider.Number = editedProvider.Number;
-        //    if (!String.IsNullOrEmpty(editedProvider.PostalCode))
-        //        provider.PostalCode = editedProvider.PostalCode;
-        //    if (!String.IsNullOrEmpty(editedProvider.Street))
-        //        provider.Street = editedProvider.Street;
-        //    if (!String.IsNullOrEmpty(editedProvider.Description))
-        //        provider.Description = editedProvider.Description;
-        //    if (!String.IsNullOrEmpty(editedProvider.Email))
-        //        provider.Email = editedProvider.Email;
-        //    if (!String.IsNullOrEmpty(editedProvider.City))
-        //        provider.City = editedProvider.City;
+        [HttpPost("/EditProvider")]
+        [Authorize(Roles = "Manager")]
+        public async Task<ServiceResponse<bool>> Edit(EditProvider editedProvider)
+        {
+            var provider = await(from u in _context.Users.Where(row => row.IsProvider == true)
+                                  .Where(row => row.Login == User.Identity.Name)
+                                join prov in _context.Providers on u.Id equals prov.UserId
+                                select prov).Select(r => r).FirstOrDefaultAsync();
 
-        //        _context.Update(provider);
-        //    await _context.SaveChangesAsync();
-        //    return ServiceResponse<bool>.Ok(true, "User edited corectly");
-        //}
+            if (provider == null)
+            {
+                return ServiceResponse<bool>.Error("User not Found");
+            }
+            var user = await _context.Users.Where(r => r.Id == provider.UserId).FirstOrDefaultAsync();
+
+            if (!String.IsNullOrEmpty(editedProvider.Name))
+                provider.Name = editedProvider.Name;
+            if (!String.IsNullOrEmpty(editedProvider.NewPassword))
+                user.Password = BCrypt.Net.BCrypt.HashPassword(editedProvider.NewPassword);
+            if (!String.IsNullOrEmpty(editedProvider.Phone))
+                provider.Phone = editedProvider.Phone;
+            if (!String.IsNullOrEmpty(editedProvider.Logo))
+                provider.Logo = editedProvider.Logo;
+            if (!String.IsNullOrEmpty(editedProvider.Number))
+                provider.Number = editedProvider.Number;
+            if (!String.IsNullOrEmpty(editedProvider.PostalCode))
+                provider.PostalCode = editedProvider.PostalCode;
+            if (!String.IsNullOrEmpty(editedProvider.Street))
+                provider.Street = editedProvider.Street;
+            if (!String.IsNullOrEmpty(editedProvider.Description))
+                provider.Description = editedProvider.Description;
+            if (!String.IsNullOrEmpty(editedProvider.Email))
+                provider.Email = editedProvider.Email;
+            if (!String.IsNullOrEmpty(editedProvider.City))
+                provider.City = editedProvider.City;
+
+            _context.Update(provider);
+            await _context.SaveChangesAsync();
+            return ServiceResponse<bool>.Ok(true, "User edited corectly");
+        }
         //[HttpPost("/LoginProvider")]
         //public async Task<ServiceResponse<bool>> Login(LoginProvider provider)
         //{

@@ -18,8 +18,9 @@ namespace ServiceFinderApi.Controllers
         
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ServiceFinderDBContext _context;
-        
-        string URL = @"https://api.smsapi.pl/sms.do?from=Test&to=48{phone}&message={code}&format=json";
+
+        string URL = @"https://api.mobitex.pl/sms.php?user=p10trek&pass=24699097bc0b38bbc785f1dc52028df4&type=sms&number=+48{phone}&text={code}&from=ServiceFinder&ext_id=7222";
+        //string URL = @"https://api.smsapi.pl/sms.do?from=Test&to=48{phone}&message={code}&format=json";
         public SmsController(ServiceFinderDBContext context, IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
