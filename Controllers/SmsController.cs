@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using ServiceFinderApi.Models;
+using ServiceFinderApi.Models.RequestModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,7 +58,7 @@ namespace ServiceFinderApi.Controllers
                 return;
             
             Random random = new Random();
-            var code = random.Next(0, 1).ToString();
+            var code = random.Next(0, 99999).ToString();
             code = code.PadLeft(5, '0');
             
             var httpRequestMessage = new HttpRequestMessage(
@@ -84,15 +85,16 @@ namespace ServiceFinderApi.Controllers
                 }
             }
         }
-        [HttpGet("/CodeVerify")]
-        public async Task<bool> CodeVerify(string code, string userName)
+        [HttpPost("/CodeVerify")]
+        public async Task<bool> CodeVerify(CodeVerify request)
         {
-            var user = await (_context.Users.Where(r => r.Login == userName)).FirstOrDefaultAsync();
+            var user = await (_context.Users.Where(r => r.Login == request.userName)).FirstOrDefaultAsync();
             if (user == null)
                 return false;
-            if (user.Code == code)
+            if (user.Code == request.smsCode)
             {
                 user.Code = null;
+                user.Password = request.password;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
                 return true;
