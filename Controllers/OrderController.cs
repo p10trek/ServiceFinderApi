@@ -137,11 +137,11 @@ namespace ServiceFinderApi.Controllers
                 Id = Guid.NewGuid(),
                 CustomerId = userId,
                 CustomerComment = order.CustomerComment,
-                EndTime = order.EndDate,
+                EndTime = order.EndDate.AddSeconds(-1),
                 ProviderId = order.ProviderId,
                 Rate = order.Rate,
                 ServiceId = order.ServiceId,
-                StartDate = order.StartDate,
+                StartDate = order.StartDate.AddSeconds(1),
                 StatusId = await _context.ServiceStatuses
                 .Where(row => row.Status == "Added")
                 .Select(r=>r.Id).FirstOrDefaultAsync()
