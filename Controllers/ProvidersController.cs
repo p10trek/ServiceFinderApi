@@ -40,20 +40,48 @@ namespace ServiceFinderApi.Controllers
             }).ToListAsync(), "User list successfully downloaded");
         }
         [HttpGet("/GetProfile")]
-        [Authorize(Roles = "Manager")]
-        public async Task<ServiceResponse<Provider>> Details()
+        [Authorize]
+        public async Task<ServiceResponse<UserProfile>> Details()
         {
-            var userID = await _context.Users.Where(row => row.IsProvider == true)
-                        .Where(row => row.Login == User.Identity.Name)
-                        .Select(r => r.Id).FirstOrDefaultAsync();
+            string userLogin = User.Identity.Name;
+            var user = await _context.Users.Where(row => row.Login == userLogin)
+                        .Where(row => row.Login == User.Identity.Name).FirstOrDefaultAsync();
 
-            var provider = await _context.Providers.FirstOrDefaultAsync(m => m.UserId ==  userID);
-            if (provider == null)
+            if (user.IsProvider == true)
             {
-                return ServiceResponse<Provider>.Error("Id not match to any provider");
+                var provider = await _context.Providers.Select(r=>new UserProfile 
+                { 
+                    City = r.City,
+                    Description = r.Description,
+                    Email = r.Email,
+                    Id = r.Id,
+                    Lat = r.Lat,
+                    Lng = r.Lng,
+                    Logo = r.Logo,
+                    Name = r.Name,
+                    Number = r.Number,
+                    Phone = r.Phone,
+                    PostalCode = r.PostalCode,
+                    Street = r.Street,
+                    UserId = r.UserId
+                }).FirstOrDefaultAsync(m => m.UserId == user.Id);
+                if (provider == null)
+                {
+                    return ServiceResponse<UserProfile>.Error("Claims not match to any user");
+                }
+
+                return ServiceResponse<UserProfile>.Ok(provider, "Provider found");
+            }
+            else
+            {
+                return ServiceResponse<UserProfile>.Ok(new UserProfile
+                {
+                    UserId = user.Id,
+                    Email = user.Email,
+                    Phone = user.Phone
+                }, "User found");
             }
 
-            return ServiceResponse<Provider>.Ok(provider, "Provider found");
         }
 
         [HttpPut("/CreateProvider")]

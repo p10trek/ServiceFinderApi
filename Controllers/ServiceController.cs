@@ -144,10 +144,16 @@ namespace ServiceFinderApi.Controllers
         [HttpGet("/GetProviderServices")]
         public async Task<ServiceResponse<List<GetProvidersServicesView>>> GetProviderServices(Guid ProviderId)
         {
-            var result = await (from serv in _context.Services.Where(row => row.ProviderId == ProviderId)
+
+            var result = await (from prov in _context.Providers.Where(row => row.Id == ProviderId)
+                                join serv in _context.Services on prov.Id equals serv.ProviderId
                                 join type in _context.ServiceTypes on serv.ServiceTypeId equals type.Id
                                 select new GetProvidersServicesView 
                                 {
+                                    ProviderLogo = prov.Logo,
+                                    ProviderDescription = prov.Description,
+                                    ProviderName = prov.Name,
+                                    Phone = prov.Phone,
                                     Description = serv.Description,
                                     Id = serv.Id,
                                     Price = serv.Price,

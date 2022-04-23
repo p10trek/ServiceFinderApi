@@ -69,10 +69,12 @@ namespace ServiceFinderApi.Controllers
         }
 
         [HttpPost("/EditUser")]
+        [Authorize]
         public async Task<ServiceResponse<bool>> Edit(EditUser editedUser)
         {
+
             var user = await _context.Users
-                                        .Where(row => row.Login == editedUser.Login)
+                                        .Where(row => row.Login == User.Identity.Name)
                                         .FirstOrDefaultAsync();
             if (user == null)
             {
@@ -80,8 +82,8 @@ namespace ServiceFinderApi.Controllers
             }
             if (!String.IsNullOrEmpty(editedUser.Name))
                 user.Name = editedUser.Name;
-            if (!String.IsNullOrEmpty(editedUser.NewPassword))
-                user.Password = BCrypt.Net.BCrypt.HashPassword(editedUser.NewPassword);
+            if (!String.IsNullOrEmpty(editedUser.Email))
+                user.Email = editedUser.Email;
             if (!String.IsNullOrEmpty(editedUser.Phone))
                 user.Phone = editedUser.Phone;
 

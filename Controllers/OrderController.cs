@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceFinderApi.Models;
 using ServiceFinderApi.Models.RequestModels;
@@ -6,6 +7,7 @@ using ServiceFinderApi.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ServiceFinderApi.Controllers
@@ -119,13 +121,14 @@ namespace ServiceFinderApi.Controllers
 
             return ServiceResponse<Order>.Ok(order, "Order found");
         }
-
+        [Authorize]
+        [AllowAnonymous]
         [HttpPut("/CreateOrder")]
         public async Task<ServiceResponse<bool>> Create(CreateOrder order)
         {
             if (!ModelState.IsValid)
                 return ServiceResponse<bool>.Error("User adding error");
-
+            
             string userLogin = User.Identity.Name ?? "Guest";
 
             var userId = await (from user in _context.Users

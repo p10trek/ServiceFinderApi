@@ -7,6 +7,10 @@ namespace ServiceFinderApi.Models.ViewModels
 {
     public class GetProvidersServicesView
     {
+        public string ProviderLogo { get; set; }
+        public string ProviderName { get; set; }
+        public string ProviderDescription { get; set; }
+        public string Phone { get; set; }
         public Guid Id { get; set; }
         public string ServiceName { get; set; }
         public Guid ProviderId { get; set; }
