@@ -107,7 +107,7 @@ namespace ServiceFinderApi.Controllers
             {
                 HttpClient client = new HttpClient();
 
-                var result = await client.GetStringAsync($"https://maps.googleapis.com/maps/api/geocode/json?address={provider.City}+{provider.Street}+{provider.Number}&key=AIzaSyDWuh1lZP1loT8uTBwG1pdzzQbf03dKj4c");
+                var result = await client.GetStringAsync($"https://maps.googleapis.com/maps/api/geocode/json?address={provider.City}+{provider.Street}+{provider.Number}&key=AIzaSyB2ji39iC4YHI6oOY1ryEwufydeosQH0oE");
                 
                 var location = JsonConvert.DeserializeObject<GetCoordinatessModel>(result);
                 decimal lat = location.results[0].geometry.location.lat;

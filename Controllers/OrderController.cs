@@ -135,6 +135,22 @@ namespace ServiceFinderApi.Controllers
                                     .Where(row => row.Login == userLogin)
                                 select user.Id).FirstOrDefaultAsync();
 
+            var IsBusyTerm = await (from ord in _context.Orders
+                         .Where(r => r.ProviderId == order.ProviderId)
+                         .Where(r =>
+                                (order.StartDate >= r.StartDate && order.StartDate <= r.EndTime)
+                                ||
+                                (order.EndDate >= r.StartDate && order.EndDate <= r.EndTime)
+                                ||
+                                (order.StartDate <= r.StartDate && order.EndDate >= r.EndTime)
+                                )
+                                select ord.Id).AnyAsync();
+
+            if (IsBusyTerm)
+            {
+                return ServiceResponse<bool>.Error("Order can not be realised in this term");
+            }
+
             Order orderToAdd = new Order
             {
                 Id = Guid.NewGuid(),
