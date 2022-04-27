@@ -89,7 +89,8 @@ namespace ServiceFinderApi.Controllers
         {
             if (!ModelState.IsValid)
                 return ServiceResponse<bool>.Error("User adding error");
-
+            if(_context.Users.Where(r=>r.Login == provider.Login).Any())
+                return ServiceResponse<bool>.Error("User allready exists");
             Guid userId = Guid.NewGuid();
             User user = new User
             {

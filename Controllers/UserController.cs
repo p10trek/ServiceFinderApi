@@ -53,6 +53,7 @@ namespace ServiceFinderApi.Controllers
             if(!ModelState.IsValid)
                 return ServiceResponse<bool>.Error("User adding error");
 
+
             User userToAdd = new User
             {
                 Id = Guid.NewGuid(),
