@@ -354,3 +354,4 @@ bin/*
 .vs/*
 Resources.resx
 appsettings.json
+Resources.Designer.cs
