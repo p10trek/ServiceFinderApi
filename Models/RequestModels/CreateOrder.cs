@@ -17,5 +17,8 @@ namespace ServiceFinderApi.Models.RequestModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public Guid StatusId { get; set; }
+        public int Duration { get; set; }
+        public decimal Price { get; set; }
+        public string ServiceName { get; set; }
     }
 }

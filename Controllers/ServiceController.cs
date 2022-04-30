@@ -28,11 +28,12 @@ namespace ServiceFinderApi.Controllers
                                     join prov in _context.Providers on user.Id equals prov.UserId
                                     select prov).Select(r => r.Id).FirstOrDefaultAsync();
 
-            var services = await (from ser in _context.Services
+            var services = await (from ser in _context.Services.Where(r=>r.IsArchival==false)
                                   join serTyp in _context.ServiceTypes on ser.ServiceTypeId equals serTyp.Id
                                   where ser.ProviderId == providerID
                                   select new ServiceView
                                   {
+                                      Id = ser.Id,
                                       Description = ser.Description,
                                       Duration = (int)ser.Duration,
                                       Price = ser.Price,
@@ -119,15 +120,15 @@ namespace ServiceFinderApi.Controllers
         }
 
         [HttpDelete("/DeleteService")]
-        public async Task<ServiceResponse<bool>> Delete(string serviceName)
+        public async Task<ServiceResponse<bool>> Delete(Guid Id)
         {
-            var service = await _context.Services.Where(row => row.ServiceName == serviceName).FirstOrDefaultAsync();
+            var service = await _context.Services.Where(row => row.Id == Id).FirstOrDefaultAsync();
             if (service == null)
             {
                 return ServiceResponse<bool>.Error("Service not found");
             }
-
-            _context.Remove(service);
+            service.IsArchival = true;
+            _context.Update(service);
             await _context.SaveChangesAsync();
 
             return ServiceResponse<bool>.Ok(true, "Service succesfully deleted");
@@ -146,8 +147,10 @@ namespace ServiceFinderApi.Controllers
         {
 
             var result = await (from prov in _context.Providers.Where(row => row.Id == ProviderId)
-                                join serv in _context.Services on prov.Id equals serv.ProviderId
+                                join serv in _context.Services.Where(r=>r.IsArchival == false) on prov.Id equals serv.ProviderId
                                 join type in _context.ServiceTypes on serv.ServiceTypeId equals type.Id
+                                where serv.IsPrivate == false
+                                where serv.IsArchival == false
                                 select new GetProvidersServicesView 
                                 {
                                     ProviderLogo = prov.Logo,

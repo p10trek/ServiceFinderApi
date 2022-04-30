@@ -151,6 +151,24 @@ namespace ServiceFinderApi.Controllers
                 return ServiceResponse<bool>.Error("Order can not be realised in this term");
             }
 
+            if(order.ServiceId == Guid.Empty)
+            {
+                order.ServiceId = Guid.NewGuid();
+                Service serviceToAdd = new Service
+                {
+                    Id = order.ServiceId,
+                    ServiceName = order.ServiceName,
+                    Description = order.ProviderComment,
+                    Price = order.Duration,
+                    ProviderId = order.ProviderId,
+                    ServiceTypeId = await _context.ServiceTypes.Where(r=>r.TypeName == "Priced").Select(r=>r.Id).FirstOrDefaultAsync(),
+                    Duration = order.Duration,
+                    IsPrivate = true,
+
+                };
+                _context.Add(serviceToAdd);
+            }
+
             Order orderToAdd = new Order
             {
                 Id = Guid.NewGuid(),

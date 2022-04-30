@@ -60,6 +60,7 @@ namespace ServiceFinderApi
                 //This is to generate the Default UI of Swagger Documentation
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
+                   
                     Version = "v1",
                     Title = "JWT Token Authentication API",
                     Description = "ASP.NET Core 5.0 Web API"
@@ -99,8 +100,12 @@ namespace ServiceFinderApi
                 x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
+                .AllowAnyOrigin()
+
+
                 .SetIsOriginAllowed(origin => true) // allow any origin
-                .AllowCredentials()); // allow credentials
+                //.AllowCredentials()
+                ); // allow credentials
             
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.

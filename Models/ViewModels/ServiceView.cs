@@ -7,6 +7,7 @@ namespace ServiceFinderApi.Models.ViewModels
 {
     public class ServiceView
     {
+        public Guid Id { get; set; }
         public string ServiceName { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }

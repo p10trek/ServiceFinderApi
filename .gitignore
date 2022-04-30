@@ -352,3 +352,5 @@ MigrationBackup/
 obj/*
 bin/*
 .vs/*
+Resources.resx
+appsettings.json
