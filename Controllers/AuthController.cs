@@ -52,7 +52,7 @@ namespace ServiceFinderApi.Controllers
                     issuer: "https://localhost:44309",
                     audience: "https://localhost:44309",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(5),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signinCredentials
                 );
                 Guid provId = Guid.Empty;

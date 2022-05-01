@@ -20,6 +20,20 @@ namespace ServiceFinderApi.Controllers
             _context = context;
         }
 
+        [HttpGet("/GetClientData")]
+        public async Task<ServiceResponse<ClientView>> GetClientData(Guid orderId)
+        {
+            var result = await (from ord in _context.Orders.Where(r=>r.Id == orderId)
+                                join cli in _context.Users on ord.CustomerId equals cli.Id
+                                select new ClientView
+                                {
+                                    ClientName = cli.Name,
+                                    ClientPhone = cli.Phone
+                                }
+                                ).FirstOrDefaultAsync();
+            return ServiceResponse<ClientView>.Ok(result, "Order list successfully downloaded");
+        }
+            
         [HttpGet("/GetProviderOrders")]
         public async Task<ServiceResponse<List<GetProviderOrdersView>>> Index(Guid providerId)
         {
@@ -68,30 +82,80 @@ namespace ServiceFinderApi.Controllers
                     FreeTermFrom = DateTime.Now
                 }, "Free terms list successfully downloaded");
             }
-            foreach (var el in result)
+            
+            DateTime tmp_endTime = new DateTime(); //przechowuje date konca zamówienia poprzedniej iteracji
+            bool isEven = false;
+            var tmpS = new DateTime();
+            var tmpE = new DateTime();
+            var IsAtThisMoment = false;
+
+    
+
+            for(int n = 0; n<result.Count;n++)
             {
-
-                if (counter == 0) 
+                if (n == 0)//obsluga pierwszego
                 {
-                    freeTermBetween = new FreeTermBetween();
-
-                    freeTermBetween.FreeTermStart = DateTime.Now < el.start?DateTime.Now:el.end;
-                    if (result.Last().id == el.id)
-                    {
-                        freeTermBetween.FreeTermEnd = DateTime.Now < el.start?el.start - servDur : DateTime.Now.AddMonths(1);
-                        freeTerms.FreeTermsBetween.Add(freeTermBetween);
-                        counter = 0;
-                        continue;
+                    if (DateTime.Now < result[n].start) // jesli przed pierwsza usluga jest wolny czas
+                    { 
+                        tmpS = DateTime.Now;
+                        tmpE = result[n].start;
                     }
-                    counter++;
-                }
-                else
-                { 
-                    freeTermBetween.FreeTermEnd = el.start-servDur;
-                    TimeSpan timeB = freeTermBetween.FreeTermEnd - freeTermBetween.FreeTermStart;
-                    if (timeB>=servDur)
+                    else // jesli pierwsza usluga jest w trakcie
+                    { 
+                        tmpS = result[n].end;
+                        tmpE = result[n+1]?.start?? DateTime.Now.AddMonths(1);
+                        IsAtThisMoment = true;
+                    }
+                    freeTermBetween = new FreeTermBetween()
+                    {
+                        FreeTermStart = tmpS,
+                        FreeTermEnd = tmpE - servDur
+                    };
                     freeTerms.FreeTermsBetween.Add(freeTermBetween);
-                    counter = 0;
+                    if (result.Last().id == result[n].id)
+                        break;
+                    else
+                        continue;
+                }
+                if (n > 0) 
+                {
+                    if (IsAtThisMoment)
+                    {
+                        if (result.Count <= n +1) break;
+                        tmpS = result[n].end;
+                        tmpE = result[n + 1].start;
+                    }
+                    else
+                    {
+                        tmpS = result[n-1].end;
+                        tmpE = result[n].start;
+                    }
+                    freeTermBetween = new FreeTermBetween()
+                    {
+                        FreeTermStart = tmpS,
+                        FreeTermEnd = tmpE - servDur
+                    };
+                    freeTerms.FreeTermsBetween.Add(freeTermBetween);
+                    //if (result.Last().id == result[n + 1]?.id)
+                    //{
+                    //    if (IsAtThisMoment)
+                    //    {
+
+                    //    }
+                    //    else
+                    //    {
+                    //        tmpS = result[n].end;
+                    //        tmpE = result[n + 1].start;
+                    //        freeTermBetween = new FreeTermBetween()
+                    //        {
+                    //            FreeTermStart = tmpS,
+                    //            FreeTermEnd = tmpE
+                    //        };
+                    //        freeTerms.FreeTermsBetween.Add(freeTermBetween);
+                    //    }
+                    //    break;
+                    //}
+                    continue;
                 }
             }
             freeTerms.FreeTermsBetween.Add(new FreeTermBetween
@@ -176,6 +240,7 @@ namespace ServiceFinderApi.Controllers
                 CustomerComment = order.CustomerComment,
                 EndTime = order.EndDate.AddSeconds(-1),
                 ProviderId = order.ProviderId,
+                
                 Rate = order.Rate,
                 ServiceId = order.ServiceId,
                 StartDate = order.StartDate.AddSeconds(1),

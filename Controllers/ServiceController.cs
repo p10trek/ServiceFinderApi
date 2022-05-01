@@ -28,7 +28,7 @@ namespace ServiceFinderApi.Controllers
                                     join prov in _context.Providers on user.Id equals prov.UserId
                                     select prov).Select(r => r.Id).FirstOrDefaultAsync();
 
-            var services = await (from ser in _context.Services.Where(r=>r.IsArchival==false)
+            var services = await (from ser in _context.Services.Where(r=>r.IsArchival==false).Where(r=>r.IsPrivate == false)
                                   join serTyp in _context.ServiceTypes on ser.ServiceTypeId equals serTyp.Id
                                   where ser.ProviderId == providerID
                                   select new ServiceView
