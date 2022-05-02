@@ -78,6 +78,7 @@ namespace ServiceFinderApi.Controllers
                 {
                     UserId = user.Id,
                     Email = user.Email,
+                    Name = user.Name,
                     Phone = user.Phone
                 }, "User found");
             }
